@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import NotFound from "../components/NotFound.vue";
 
 Vue.use(VueRouter);
 
@@ -32,6 +33,31 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "create" */ "../views/Color.vue"),
   },
+  {
+    path: "/search",
+    name: "Explore",
+    component: () =>
+      import(/* webpackChunkName: "create" */ "../views/Explore.vue"),
+  },
+  {
+    path: "/signup",
+    name: "SignUp",
+    component: () =>
+      import(/* webpackChunkName: "create" */ "../views/SignUp.vue"),
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () =>
+      import(/* webpackChunkName: "create" */ "../views/Login.vue"),
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: () =>
+      import(/* webpackChunkName: "create" */ "../views/Profile.vue"),
+  },
+  { path: "*", component: NotFound },
 ];
 
 const router = new VueRouter({

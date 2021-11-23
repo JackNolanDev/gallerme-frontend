@@ -304,7 +304,12 @@ export default {
         (prev, current) => (prev += current.color.substring(1)),
         ""
       );
-      const response = { name: this.artName, size: this.size, data };
+      const usedColorSet = new Set(this.pixels.map((pixel) => pixel.color));
+      // Check if we used any of our favorite colors
+      const colors = this.favoriteColors
+        .filter((c) => usedColorSet.has(c.color))
+        .map((c) => c.id);
+      const response = { name: this.artName, size: this.size, data, colors };
       console.log(response);
       localStorage.removeItem(LOCAL_STORAGE_SIZE);
       localStorage.removeItem(LOCAL_STORAGE_PIXELS);
