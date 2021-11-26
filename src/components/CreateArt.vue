@@ -246,7 +246,7 @@ export default {
       this.size = size;
       this.pixels = [];
       for (let i = 0; i < size * size; i++) {
-        this.pixels.push({ id: crypto.randomUUID(), color: "#ffffff" });
+        this.pixels.push({ id: i, color: "#ffffff" });
       }
       localStorage.setItem(LOCAL_STORAGE_PIXELS, JSON.stringify(this.pixels));
     },
