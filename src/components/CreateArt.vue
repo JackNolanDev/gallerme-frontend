@@ -1,165 +1,162 @@
 <template>
-  <div>
-    <h1>Make</h1>
-    <div class="card">
-      <div class="row g-0">
-        <div class="col-12 col-md-7 col-lg-8 col-xl-6">
-          <!-- ************ DRAWING SPACE ************ -->
+  <div class="card">
+    <div class="row g-0">
+      <div class="col-12 col-md-7 col-lg-8 col-xl-6">
+        <!-- ************ DRAWING SPACE ************ -->
+        <div
+          v-bind:style="artBoardStyle"
+          @mousedown="startDrawing"
+          @mouseup="stopDrawing"
+          @mouseleave="stopDrawing"
+          class="artBoard"
+        >
           <div
-            v-bind:style="artBoardStyle"
-            @mousedown="startDrawing"
-            @mouseup="stopDrawing"
-            @mouseleave="stopDrawing"
-            class="artBoard"
-          >
-            <div
-              v-for="(pixel, index) in pixels"
-              v-bind:key="pixel.id"
-              @click="colorPixel(index)"
-              @mouseenter="dragColorPixel(index)"
-              @mouseleave="dragColorPixel(index)"
-              v-bind:style="{ backgroundColor: pixel.color }"
-              class="pixel ratio ratio-1x1"
-            ></div>
-          </div>
+            v-for="(pixel, index) in pixels"
+            v-bind:key="pixel.id"
+            @click="colorPixel(index)"
+            @mouseenter="dragColorPixel(index)"
+            @mouseleave="dragColorPixel(index)"
+            v-bind:style="{ backgroundColor: pixel.color }"
+            class="pixel ratio ratio-1x1"
+          ></div>
         </div>
-        <div class="col-12 col-md-5 col-lg-4 col-xl-6">
-          <div
-            class="
-              card-body
-              d-flex
-              flex-column
-              justify-content-between
-              cardSeperator
-              tall
-            "
-          >
-            <div>
-              <h2 class="card-title">Options</h2>
-              <!-- ************ BASIC COLOR SELECTOR ************ -->
-              <div class="d-flex align-items-center mb-2">
-                <label for="colorInput">Draw color:</label>
-                <input
-                  id="colorInput"
-                  type="color"
-                  v-model="color"
-                  class="ms-1"
-                />
-              </div>
-              <!-- ************ FAVORITE COLOR SELECTOR ************ -->
-              <div class="accordion mb-2">
-                <div class="accordion-item">
-                  <h2 class="accordion-header">
-                    <button
-                      v-on:click="toggleDisplayFavoriteColors"
-                      v-bind:class="favoriteColorHeaderClass"
-                      class="accordion-button"
-                    >
-                      Show Favorite colors
-                    </button>
-                  </h2>
-                  <div
-                    v-bind:class="displayFavoriteColorsClass"
-                    class="accordion-collapse collapse"
+      </div>
+      <div class="col-12 col-md-5 col-lg-4 col-xl-6">
+        <div
+          class="
+            card-body
+            d-flex
+            flex-column
+            justify-content-between
+            cardSeperator
+            tall
+          "
+        >
+          <div>
+            <h2 class="card-title">Options</h2>
+            <!-- ************ BASIC COLOR SELECTOR ************ -->
+            <div class="d-flex align-items-center mb-2">
+              <label for="colorInput">Draw color:</label>
+              <input
+                id="colorInput"
+                type="color"
+                v-model="color"
+                class="ms-1"
+              />
+            </div>
+            <!-- ************ FAVORITE COLOR SELECTOR ************ -->
+            <div v-if="showFavoriteColorSelector" class="accordion mb-2">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button
+                    v-on:click="toggleDisplayFavoriteColors"
+                    v-bind:class="favoriteColorHeaderClass"
+                    class="accordion-button"
                   >
-                    <div class="list-group list-group-flush">
-                      <router-link
-                        to="/color"
-                        class="list-group-item list-group-item-action"
-                      >
-                        Edit favorite colors
-                      </router-link>
-                      <button
-                        v-for="c in favoriteColors"
-                        v-bind:key="c.id"
-                        v-on:click="useFavoriteColor(c.color)"
-                        class="
-                          list-group-item list-group-item-action
-                          d-flex
-                          justify-content-between
-                          align-items-center
-                        "
-                      >
-                        <div>{{ c.name }}</div>
-                        <div
-                          v-bind:style="{ backgroundColor: c.color }"
-                          class="favoriteColorExample"
-                        ></div>
-                      </button>
-                    </div>
+                    Show Favorite colors
+                  </button>
+                </h2>
+                <div
+                  v-bind:class="displayFavoriteColorsClass"
+                  class="accordion-collapse collapse"
+                >
+                  <div class="list-group list-group-flush">
+                    <router-link
+                      to="/color"
+                      class="list-group-item list-group-item-action"
+                    >
+                      Edit favorite colors
+                    </router-link>
+                    <button
+                      v-for="c in favoriteColors"
+                      v-bind:key="c.id"
+                      v-on:click="useFavoriteColor(c.color)"
+                      class="
+                        list-group-item list-group-item-action
+                        d-flex
+                        justify-content-between
+                        align-items-center
+                      "
+                    >
+                      <div>{{ c.name }}</div>
+                      <div
+                        v-bind:style="{ backgroundColor: c.color }"
+                        class="favoriteColorExample"
+                      ></div>
+                    </button>
                   </div>
                 </div>
               </div>
-              <!-- ************ TOOL SELECTOR ************ -->
-              <h5>Select Tool</h5>
-              <div class="form-check">
-                <input
-                  type="radio"
-                  id="pencilOption"
-                  value="pencil"
-                  v-model="tool"
-                  class="form-check-input"
-                  checked
-                />
-                <label class="form-check-label" for="pencilOption">
-                  <i class="fas fa-pencil-alt"></i> Pencil tool
-                </label>
-              </div>
-              <div class="form-check mb-2">
-                <input
-                  type="radio"
-                  id="bucketOption"
-                  value="bucket"
-                  v-model="tool"
-                  class="form-check-input"
-                />
-                <label class="form-check-label" for="bucketOption">
-                  <i class="fas fa-fill-drip"></i> Paint bucket tool
-                </label>
-              </div>
-              <!-- ************ SIZE SELECTOR ************ -->
+            </div>
+            <!-- ************ TOOL SELECTOR ************ -->
+            <h5>Select Tool</h5>
+            <div class="form-check">
+              <input
+                type="radio"
+                id="pencilOption"
+                value="pencil"
+                v-model="tool"
+                class="form-check-input"
+                checked
+              />
+              <label class="form-check-label" for="pencilOption">
+                <i class="fas fa-pencil-alt"></i> Pencil tool
+              </label>
+            </div>
+            <div class="form-check mb-2">
+              <input
+                type="radio"
+                id="bucketOption"
+                value="bucket"
+                v-model="tool"
+                class="form-check-input"
+              />
+              <label class="form-check-label" for="bucketOption">
+                <i class="fas fa-fill-drip"></i> Paint bucket tool
+              </label>
+            </div>
+            <!-- ************ SIZE SELECTOR ************ -->
+            <div class="input-group mb-2">
+              <label for="sizeInput" class="input-group-text">
+                Change size:
+              </label>
+              <input
+                id="sizeInput"
+                type="number"
+                placeholder="8"
+                v-bind:min="minSize"
+                v-bind:max="maxSize"
+                v-model="sizeInput"
+                v-on:input="changeSize"
+                class="form-control"
+              />
+            </div>
+          </div>
+          <!-- ************ PUBLISH ART BUTTON ************ -->
+          <div class="row">
+            <div class="col-12 col-xl-8">
               <div class="input-group mb-2">
-                <label for="sizeInput" class="input-group-text">
-                  Change size:
+                <label for="artInput" class="input-group-text">
+                  Name your art:
                 </label>
                 <input
-                  id="sizeInput"
-                  type="number"
-                  placeholder="8"
-                  v-bind:min="minSize"
-                  v-bind:max="maxSize"
-                  v-model="sizeInput"
-                  v-on:input="changeSize"
+                  id="artInput"
+                  type="text"
+                  v-model="artName"
+                  placeholder="Mona Lisa"
                   class="form-control"
                 />
               </div>
             </div>
-            <!-- ************ PUBLISH ART BUTTON ************ -->
-            <div class="row">
-              <div class="col-12 col-xl-8">
-                <div class="input-group mb-2">
-                  <label for="artInput" class="input-group-text">
-                    Name your art:
-                  </label>
-                  <input
-                    id="artInput"
-                    type="text"
-                    v-model="artName"
-                    placeholder="Mona Lisa"
-                    class="form-control"
-                  />
-                </div>
-              </div>
-              <div class="col-12 col-xl-4">
-                <button
-                  type="button"
-                  v-bind:disabled="publishButtonDisabled"
-                  v-on:click="publishArt"
-                  class="btn btn-primary col-12"
-                >
-                  Publish!
-                </button>
-              </div>
+            <div class="col-12 col-xl-4">
+              <button
+                type="button"
+                v-bind:disabled="publishButtonDisabled"
+                v-on:click="publishArt"
+                class="btn btn-primary col-12"
+              >
+                Publish!
+              </button>
             </div>
           </div>
         </div>
@@ -179,6 +176,12 @@ const LOCAL_STORAGE_PIXELS = "create_pixels";
 
 export default {
   name: "CreateArt",
+  props: {
+    showFavoriteColorSelector: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       size: 0,
@@ -304,15 +307,20 @@ export default {
         (prev, current) => (prev += current.color.substring(1)),
         ""
       );
-      const usedColorSet = new Set(this.pixels.map((pixel) => pixel.color));
+      const response = { name: this.artName, size: this.size, data };
       // Check if we used any of our favorite colors
-      const colors = this.favoriteColors
-        .filter((c) => usedColorSet.has(c.color))
-        .map((c) => c.id);
-      const response = { name: this.artName, size: this.size, data, colors };
+      if (this.showFavoriteColorSelector) {
+        const usedColorSet = new Set(this.pixels.map((pixel) => pixel.color));
+        const colors = this.favoriteColors
+          .filter((c) => usedColorSet.has(c.color))
+          .map((c) => c.id);
+        response.colors = colors;
+      }
       console.log(response);
-      localStorage.removeItem(LOCAL_STORAGE_SIZE);
-      localStorage.removeItem(LOCAL_STORAGE_PIXELS);
+      // local storage should be cleared after API is completed successfully
+      // localStorage.removeItem(LOCAL_STORAGE_SIZE);
+      // localStorage.removeItem(LOCAL_STORAGE_PIXELS);
+      this.$emit("published", response);
     },
   },
 };

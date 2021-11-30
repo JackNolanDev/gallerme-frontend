@@ -1,4 +1,5 @@
-import colorApi from "../../api/colorApi";
+import colorApi from "@/api/colorApi";
+import router from "@/router/index";
 
 const state = {
   color: {},
@@ -34,6 +35,7 @@ const actions = {
       if (response && response.status == 0) {
         // just route to correct page instead of setting details here
         commit("setColor", response.value);
+        router.push("/admin/colors");
       }
     });
   },
@@ -48,6 +50,7 @@ const actions = {
     colorApi.deleteColor(id).then((response) => {
       if (response && response.status == 0) {
         commit("setColor", {});
+        router.push("/admin/colors");
       }
     });
   },

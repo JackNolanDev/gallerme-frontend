@@ -45,6 +45,7 @@ const actions = {
       if (response && response.status == 0) {
         // just route to correct page instead of setting details here
         commit("setUser", response.value);
+        router.push("/admin/users");
       }
     });
   },

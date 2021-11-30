@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <h1>Make</h1>
     <create-art />
   </div>
 </template>

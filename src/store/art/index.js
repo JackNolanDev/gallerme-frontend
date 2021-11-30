@@ -1,4 +1,5 @@
-import artApi from "../../api/artApi";
+import artApi from "@/api/artApi";
+import router from "@/router/index";
 
 const state = {
   art: {},
@@ -34,6 +35,10 @@ const actions = {
       if (response && response.status == 0) {
         // just route to correct page instead of setting details here
         commit("setArt", response.value);
+        // TODO: read from a constants util file
+        localStorage.removeItem("create_size");
+        localStorage.removeItem("create_pixels");
+        router.push("/admin/art");
       }
     });
   },
@@ -48,6 +53,7 @@ const actions = {
     artApi.deleteArt(id).then((response) => {
       if (response && response.status == 0) {
         commit("setArt", {});
+        router.push("/admin/art");
       }
     });
   },

@@ -20,6 +20,9 @@ export default {
       return { gridTemplateColumns: `repeat(${this.art.size}, 1fr)` };
     },
     pixels() {
+      if (!this.art || !this.art.data) {
+        return [];
+      }
       const chunkCount = Math.ceil(this.art.data.length / 6);
       const pixels = new Array(chunkCount);
       for (let i = 0, o = 0; i < chunkCount; ++i, o += 6) {
