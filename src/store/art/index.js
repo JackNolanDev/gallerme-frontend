@@ -57,6 +57,7 @@ const module = {
   state,
   mutations,
   actions,
+  namespaced: true,
 };
 
 export default module;

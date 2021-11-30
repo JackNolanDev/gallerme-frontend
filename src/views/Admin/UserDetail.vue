@@ -156,6 +156,8 @@
     <confirmation-modal
       v-bind:title="confirmationTitle"
       v-bind:body="confirmationBody"
+      v-bind:primaryButtonText="confirmationButton"
+      v-bind:primaryButtonClass="confirmationButtonClass"
       v-bind:visible="confirmationVisible"
       @toggleVisible="toggleVisible"
       @primaryButton="confirmedDeleteButton"
@@ -178,10 +180,12 @@ export default {
   data() {
     return {
       id: "",
+      confirmedMethod: "",
       confirmationTitle: "",
+      confirmationButton: "Confirm",
+      confirmationButtonClass: "btn-primary",
       confirmationBody: "",
       confirmationVisible: false,
-      confirmedMethod: "",
     };
   },
   beforeMount() {
@@ -231,18 +235,24 @@ export default {
       this.confirmedMethod = "create";
       this.confirmationTitle = "Create new user?";
       this.confirmationBody = "Are you sure you want to create this user?";
+      this.confirmationButton = "Create";
+      this.confirmationButtonClass = "btn-primary";
       this.toggleVisible();
     },
     updateButton() {
       this.confirmedMethod = "update";
       this.confirmationTitle = "Update user?";
       this.confirmationBody = "Are you sure you want to update this user?";
+      this.confirmationButton = "Update";
+      this.confirmationButtonClass = "btn-warning";
       this.toggleVisible();
     },
     deleteButton() {
       this.confirmedMethod = "delete";
       this.confirmationTitle = "Delete user?";
       this.confirmationBody = "Are you sure you want to delete this user?";
+      this.confirmationButton = "Delete";
+      this.confirmationButtonClass = "btn-danger";
       this.toggleVisible();
     },
     toggleVisible() {
@@ -276,7 +286,6 @@ export default {
           this.$store.dispatch("users/deleteUser", this.id);
           break;
       }
-      console.log(this.user);
     },
   },
 };
