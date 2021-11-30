@@ -14,9 +14,16 @@
           <!-- class="active" to make the link the active one -->
           <router-link to="/search" class="nav-link">Explore</router-link>
           <router-link to="/create" class="nav-link">Create</router-link>
-          <!-- Add admin link when account is ADMIN to database view -->
+          <router-link v-if="isAdmin" to="/admin" class="nav-link">
+            Admin
+          </router-link>
         </div>
-        <div class="d-flex">
+        <div v-if="isLoggedIn" class="navbar-nav">
+          <router-link to="/profile" class="nav-link">
+            <i class="fas fa-user navIcon"></i>
+          </router-link>
+        </div>
+        <div v-else class="d-flex">
           <!-- Replace with profile link & Logout button when logged in -->
           <router-link to="/signup" class="btn btn-outline-success me-2">
             Sign Up
@@ -31,6 +38,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Nav",
   data() {
@@ -39,6 +48,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["isLoggedIn", "isAdmin"]),
     dropDownClass() {
       return this.showDropDown ? "" : "collapse";
     },
@@ -50,3 +60,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.navIcon {
+  font-size: 16pt;
+}
+</style>

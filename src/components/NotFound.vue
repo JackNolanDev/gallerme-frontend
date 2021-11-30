@@ -1,11 +1,5 @@
 <template>
   <div>
-    <h1>404 Not Found</h1>
+    <h1 class="text-center mt-2">404 Not Found</h1>
   </div>
 </template>
-
-<style scoped>
-h1 {
-  text-align: center;
-}
-</style>

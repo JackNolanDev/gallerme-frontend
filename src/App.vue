@@ -13,6 +13,9 @@ export default {
   components: {
     Nav,
   },
+  beforeMount() {
+    this.$store.dispatch("fetchCurrentUser");
+  },
 };
 </script>
 

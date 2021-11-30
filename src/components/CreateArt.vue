@@ -318,7 +318,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .artBoard {
   display: grid;
 }
