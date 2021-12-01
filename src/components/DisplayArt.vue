@@ -23,10 +23,10 @@ export default {
       if (!this.art || !this.art.data) {
         return [];
       }
-      const chunkCount = Math.ceil(this.art.data.length / 6);
-      const pixels = new Array(chunkCount);
-      for (let i = 0, o = 0; i < chunkCount; ++i, o += 6) {
-        pixels[i] = "#" + this.art.data.substr(o, 6);
+      const pixelCount = Math.ceil(this.art.data.length / 6);
+      const pixels = new Array(pixelCount);
+      for (let i = 0, o = 0; i < pixelCount; ++i, o += 6) {
+        pixels[i] = "#" + this.art.data.substring(o, o + 6);
       }
       return pixels;
     },
