@@ -2,7 +2,7 @@
   <div class="container">
     <h1 class="text-center mt-2">Colors</h1>
     <router-link to="/admin/colors/new" class="btn btn-primary">
-      Create New User
+      Create New Color
     </router-link>
     <div class="list-group mt-2">
       <router-link
