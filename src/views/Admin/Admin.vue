@@ -17,3 +17,19 @@
     </ul>
   </div>
 </template>
+
+<script>
+import { mapGetters } from "vuex";
+
+export default {
+  name: "Admin",
+  beforeMount() {
+    if (!this.isAdmin) {
+      this.$router.push("/");
+    }
+  },
+  computed: {
+    ...mapGetters(["isAdmin"]),
+  },
+};
+</script>

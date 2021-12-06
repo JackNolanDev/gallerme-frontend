@@ -51,6 +51,7 @@ const routes = [
   {
     path: "/profile",
     name: "Profile",
+    meta: { loggedInOnly: true },
     component: () =>
       import(/* webpackChunkName: "profile" */ "../views/Profile.vue"),
   },
@@ -58,18 +59,21 @@ const routes = [
   {
     path: "/admin",
     name: "Admin",
+    meta: { loggedInOnly: true, adminOnly: true },
     component: () =>
       import(/* webpackChunkName: "admin" */ "../views/Admin/Admin.vue"),
   },
   {
     path: "/admin/art",
     name: "AdminArt",
+    meta: { loggedInOnly: true, adminOnly: true },
     component: () =>
       import(/* webpackChunkName: "adminArt" */ "../views/Admin/Art.vue"),
   },
   {
     path: "/admin/art/:id",
     name: "AdminArtDetail",
+    meta: { loggedInOnly: true, adminOnly: true },
     component: () =>
       import(
         /* webpackChunkName: "adminArtDetail" */ "../views/Admin/ArtDetail.vue"
@@ -78,12 +82,14 @@ const routes = [
   {
     path: "/admin/colors",
     name: "AdminColors",
+    meta: { loggedInOnly: true, adminOnly: true },
     component: () =>
       import(/* webpackChunkName: "adminColors" */ "../views/Admin/Colors.vue"),
   },
   {
     path: "/admin/colors/:id",
     name: "AdminColorDetail",
+    meta: { loggedInOnly: true, adminOnly: true },
     component: () =>
       import(
         /* webpackChunkName: "adminColorDetail" */ "../views/Admin/ColorDetail.vue"
@@ -92,12 +98,14 @@ const routes = [
   {
     path: "/admin/users",
     name: "AdminUsers",
+    meta: { loggedInOnly: true, adminOnly: true },
     component: () =>
       import(/* webpackChunkName: "adminUsers" */ "../views/Admin/Users.vue"),
   },
   {
     path: "/admin/users/:id",
     name: "AdminUserDetail",
+    meta: { loggedInOnly: true, adminOnly: true },
     component: () =>
       import(
         /* webpackChunkName: "adminUserDetail" */ "../views/Admin/UserDetail.vue"

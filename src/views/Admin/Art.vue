@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import DisplayArt from "../../components/DisplayArt.vue";
 
 export default {
@@ -28,9 +28,14 @@ export default {
     DisplayArt,
   },
   beforeMount() {
+    if (!this.isAdmin) {
+      this.$router.push("/");
+      return;
+    }
     this.$store.dispatch("art/fetchAllArt");
   },
   computed: {
+    ...mapGetters(["isAdmin"]),
     ...mapState("art", ["artList"]),
   },
 };

@@ -21,14 +21,19 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "AdminUsers",
   beforeMount() {
+    if (!this.isAdmin) {
+      this.$router.push("/");
+      return;
+    }
     this.$store.dispatch("users/fetchUsers");
   },
   computed: {
+    ...mapGetters(["isAdmin"]),
     ...mapState("users", ["users"]),
   },
 };

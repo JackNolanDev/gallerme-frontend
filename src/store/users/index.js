@@ -18,14 +18,14 @@ const mutations = {
 const actions = {
   fetchUsers: ({ commit }) => {
     userApi.getAllUsers().then((response) => {
-      if (response && response.status == 0) {
+      if (response && response.status === 0) {
         commit("setUsers", response.value);
       }
     });
   },
   fetchUserById: ({ commit }, id) => {
     userApi.getUserById(id).then((response) => {
-      if (response && response.status == 0) {
+      if (response && response.status === 0) {
         // Hack - trim date format so html form can read it
         if (
           response.value.date_of_birth &&
@@ -42,7 +42,7 @@ const actions = {
   },
   createUser: ({ commit }, user) => {
     userApi.createUser(user).then((response) => {
-      if (response && response.status == 0) {
+      if (response && response.status === 0) {
         // just route to correct page instead of setting details here
         commit("setUser", response.value);
         router.push("/admin/users");
@@ -51,14 +51,14 @@ const actions = {
   },
   updateUser: ({ commit }, user) => {
     userApi.updateUser(user).then((response) => {
-      if (response && response.status == 0) {
+      if (response && response.status === 0) {
         commit("setUser", response.value);
       }
     });
   },
   deleteUser: ({ commit }, id) => {
     userApi.deleteUser(id).then((response) => {
-      if (response && response.status == 0) {
+      if (response && response.status === 0) {
         commit("setUser", {});
         router.push("/admin/users");
       }

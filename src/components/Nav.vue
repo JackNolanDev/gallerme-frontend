@@ -19,9 +19,16 @@
           </router-link>
         </div>
         <div v-if="isLoggedIn" class="navbar-nav">
-          <router-link to="/profile" class="nav-link">
-            <i class="fas fa-user navIcon"></i>
+          <router-link to="/profile" class="nav-link me-1">
+            Profile
           </router-link>
+          <button
+            type="button"
+            v-on:click="logoutButton()"
+            class="btn btn-outline-secondary"
+          >
+            Logout
+          </button>
         </div>
         <div v-else class="d-flex">
           <!-- Replace with profile link & Logout button when logged in -->
@@ -57,12 +64,9 @@ export default {
     toggleDropDown() {
       this.showDropDown = !this.showDropDown;
     },
+    logoutButton() {
+      this.$store.dispatch("logout");
+    },
   },
 };
 </script>
-
-<style scoped>
-.navIcon {
-  font-size: 16pt;
-}
-</style>

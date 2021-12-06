@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapGetters, mapState, mapMutations } from "vuex";
 import { validate } from "uuid";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
 import DisplayArt from "../../components/DisplayArt.vue";
@@ -112,6 +112,10 @@ export default {
     };
   },
   beforeMount() {
+    if (!this.isAdmin) {
+      this.$router.push("/");
+      return;
+    }
     this.id = this.$route.params.id;
     if (!this.isNew) {
       if (validate(this.id)) {
@@ -140,6 +144,7 @@ export default {
     },
   },
   methods: {
+    ...mapGetters(["isAdmin"]),
     ...mapMutations("art", ["setArt"]),
     createButton(art) {
       if (!this.art.user_id) {

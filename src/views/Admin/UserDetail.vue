@@ -166,7 +166,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapGetters, mapState, mapMutations } from "vuex";
 import { validate } from "uuid";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
 
@@ -189,6 +189,10 @@ export default {
     };
   },
   beforeMount() {
+    if (!this.isAdmin) {
+      this.$router.push("/");
+      return;
+    }
     this.id = this.$route.params.id;
     if (!this.isNew) {
       if (validate(this.id)) {
@@ -202,6 +206,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["isAdmin"]),
     ...mapState("users", ["user"]),
     isNew() {
       return this.id === NEW_PATH;

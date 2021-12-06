@@ -13,7 +13,7 @@ export default {
   components: {
     Nav,
   },
-  beforeMount() {
+  mounted() {
     this.$store.dispatch("fetchCurrentUser");
   },
 };

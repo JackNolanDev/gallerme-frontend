@@ -1,9 +1,5 @@
 import backendApi from "./backendApi";
 
-const currentUser = () => {
-  return backendApi.get("/users/current").then((response) => response.data);
-};
-
 const getAllUsers = () => {
   return backendApi.get("/users").then((response) => response.data);
 };
@@ -25,7 +21,6 @@ const deleteUser = (id) => {
 };
 
 export default {
-  currentUser,
   getAllUsers,
   getUserById,
   createUser,

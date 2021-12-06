@@ -1,9 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import router from "@/router/index";
 import artStore from "./art";
 import colorStore from "./colors";
 import userStore from "./users";
-import userApi from "../api/userApi";
+import accountApi from "../api/accountApi";
 
 Vue.use(Vuex);
 
@@ -22,8 +23,8 @@ const state = {
 };
 
 const getters = {
-  isLoggedIn: (state) => state.currentUser.id === undefined, // state.currentUser !== {}
-  isAdmin: (state) => state.currentUser.role === undefined, // state.currentUser !== {} && state.currentUser.role === "ADMIN",
+  isLoggedIn: (state) => state.currentUser.id !== undefined,
+  isAdmin: (state) => state.currentUser.role === "ADMIN",
 };
 
 const mutations = {
@@ -42,14 +43,49 @@ const actions = {
   fetchCurrentUser: ({ state, commit }) => {
     // only run api if we haven't checked it yet
     if (!state.currentUserChecked) {
-      userApi.currentUser().then((response) => {
+      accountApi.currentUser().then((response) => {
         commit("currentUserChecked");
-        if (response && response.status == 0) {
-          // just route to correct page instead of setting details here
-          commit("setCurrentUser", response.value);
+        if (response) {
+          if (response.status === 0) {
+            commit("setCurrentUser", response.value);
+            if (
+              router.currentRoute.meta.adminOnly &&
+              response.value.role !== "ADMIN"
+            ) {
+              // re-route from admin only page if not admin
+              router.push("/");
+            }
+          } else if (router.currentRoute.meta.loggedInOnly) {
+            // re-route from logged in only page if not admin
+            router.push("/");
+          }
         }
       });
     }
+  },
+  signup: ({ commit }, user) => {
+    accountApi.signup(user).then((response) => {
+      if (response && response.status === 0) {
+        commit("setCurrentUser", response.value);
+        router.push("/");
+      }
+    });
+  },
+  login: ({ commit }, user) => {
+    accountApi.login(user).then((response) => {
+      if (response && response.status === 0) {
+        commit("setCurrentUser", response.value);
+        router.push("/");
+      }
+    });
+  },
+  logout: ({ commit }) => {
+    accountApi.logout().then((response) => {
+      if (response && response.status === 0) {
+        commit("setCurrentUser", {});
+        router.push("/");
+      }
+    });
   },
 };
 

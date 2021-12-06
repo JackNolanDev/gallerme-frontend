@@ -22,14 +22,19 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "AdminColors",
   beforeMount() {
+    if (!this.isAdmin) {
+      this.$router.push("/");
+      return;
+    }
     this.$store.dispatch("colors/fetchColors");
   },
   computed: {
+    ...mapGetters(["isAdmin"]),
     ...mapState("colors", ["colors"]),
   },
 };
