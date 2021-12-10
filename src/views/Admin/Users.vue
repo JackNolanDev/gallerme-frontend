@@ -26,7 +26,7 @@ import { mapGetters, mapState } from "vuex";
 export default {
   name: "AdminUsers",
   beforeMount() {
-    if (!this.isAdmin) {
+    if (this.currentUserChecked && !this.isAdmin) {
       this.$router.push("/");
       return;
     }
@@ -34,6 +34,7 @@ export default {
   },
   computed: {
     ...mapGetters(["isAdmin"]),
+    ...mapState(["currentUserChecked"]),
     ...mapState("users", ["users"]),
   },
 };

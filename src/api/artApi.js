@@ -8,6 +8,20 @@ const getArtById = (id) => {
   return backendApi.get(`/art/${id}`).then((response) => response.data);
 };
 
+const getArtByUserId = (id) => {
+  return backendApi.get(`/art/user/${id}`).then((response) => response.data);
+};
+
+const getArtByColorId = (id) => {
+  return backendApi.get(`/art/color/${id}`).then((response) => response.data);
+};
+
+const searchArt = (term) => {
+  return backendApi
+    .get("/art/search", { params: { term } })
+    .then((response) => response.data);
+};
+
 const createArt = (art) => {
   return backendApi.post("/art", art).then((response) => response.data);
 };
@@ -23,6 +37,9 @@ const deleteArt = (id) => {
 export default {
   getAllArt,
   getArtById,
+  getArtByUserId,
+  getArtByColorId,
+  searchArt,
   createArt,
   updateArt,
   deleteArt,

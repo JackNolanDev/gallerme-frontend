@@ -4,14 +4,18 @@ import router from "@/router/index";
 const state = {
   color: {},
   colors: [],
+  colorSearchList: [],
 };
 
 const mutations = {
+  setColor(state, color) {
+    state.color = color;
+  },
   setColors(state, colors) {
     state.colors = colors;
   },
-  setColor(state, color) {
-    state.color = color;
+  setColorSearchList(state, list) {
+    state.colorSearchList = list;
   },
 };
 
@@ -27,6 +31,27 @@ const actions = {
     colorApi.getColorById(id).then((response) => {
       if (response && response.status === 0) {
         commit("setColor", response.value);
+      }
+    });
+  },
+  fetchColorsByUserId: ({ commit }, id) => {
+    colorApi.getColorByUserId(id).then((response) => {
+      if (response && response.status === 0) {
+        commit("setColors", response.value);
+      }
+    });
+  },
+  fetchColorsByArtId: ({ commit }, id) => {
+    colorApi.getColorByArtId(id).then((response) => {
+      if (response && response.status === 0) {
+        commit("setColors", response.value);
+      }
+    });
+  },
+  searchForColors: ({ commit }, term) => {
+    colorApi.searchColors(term).then((response) => {
+      if (response && response.status === 0) {
+        commit("setColorSearchList", response.value);
       }
     });
   },

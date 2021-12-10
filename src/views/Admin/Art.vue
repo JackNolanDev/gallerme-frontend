@@ -4,31 +4,21 @@
     <router-link to="/admin/art/new" class="btn btn-primary">
       Create New Art
     </router-link>
-    <div class="list-group mt-2">
-      <router-link
-        v-for="(art, index) in artList"
-        v-bind:key="index"
-        :to="{ name: 'AdminArtDetail', params: { id: art.id } }"
-        class="list-group-item list-group-item-action d-flex align-items-center"
-      >
-        <display-art v-bind:art="art" class="art me-2" />
-        <div>{{ art.name }}</div>
-      </router-link>
-    </div>
+    <art-list class="mt-2" />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import DisplayArt from "../../components/DisplayArt.vue";
+import ArtList from "../../components/ArtList.vue";
 
 export default {
   name: "AdminArt",
   components: {
-    DisplayArt,
+    ArtList,
   },
   beforeMount() {
-    if (!this.isAdmin) {
+    if (this.currentUserChecked && !this.isAdmin) {
       this.$router.push("/");
       return;
     }
@@ -36,13 +26,7 @@ export default {
   },
   computed: {
     ...mapGetters(["isAdmin"]),
-    ...mapState("art", ["artList"]),
+    ...mapState(["currentUserChecked"]),
   },
 };
 </script>
-
-<style scoped>
-.art {
-  width: 200px;
-}
-</style>

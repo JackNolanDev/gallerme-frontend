@@ -19,17 +19,18 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "Admin",
   beforeMount() {
-    if (!this.isAdmin) {
+    if (this.currentUserChecked && !this.isAdmin) {
       this.$router.push("/");
     }
   },
   computed: {
     ...mapGetters(["isAdmin"]),
+    ...mapState(["currentUserChecked"]),
   },
 };
 </script>

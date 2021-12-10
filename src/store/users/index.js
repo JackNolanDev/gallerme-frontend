@@ -1,6 +1,14 @@
 import router from "@/router/index";
 import userApi from "@/api/userApi";
 
+// Hack - trim date format so html form can read it
+const trimDOB = (res) => {
+  if (res.value.date_of_birth && res.value.date_of_birth.length > 10) {
+    return res.value.date_of_birth.substring(0, 10);
+  }
+  return undefined;
+};
+
 const state = {
   user: {},
   users: [],
@@ -26,16 +34,23 @@ const actions = {
   fetchUserById: ({ commit }, id) => {
     userApi.getUserById(id).then((response) => {
       if (response && response.status === 0) {
-        // Hack - trim date format so html form can read it
-        if (
-          response.value.date_of_birth &&
-          response.value.date_of_birth.length > 10
-        ) {
-          response.value.date_of_birth = response.value.date_of_birth.substring(
-            0,
-            10
-          );
-        }
+        response.value.date_of_birth = trimDOB(response);
+        commit("setUser", response.value);
+      }
+    });
+  },
+  fetchUserByColorId: ({ commit }, id) => {
+    userApi.getUserByColorId(id).then((response) => {
+      if (response && response.status === 0) {
+        response.value.date_of_birth = trimDOB(response);
+        commit("setUser", response.value);
+      }
+    });
+  },
+  fetchUserByArtId: ({ commit }, id) => {
+    userApi.getUserByArtId(id).then((response) => {
+      if (response && response.status === 0) {
+        response.value.date_of_birth = trimDOB(response);
         commit("setUser", response.value);
       }
     });

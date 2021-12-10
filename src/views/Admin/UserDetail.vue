@@ -189,7 +189,7 @@ export default {
     };
   },
   beforeMount() {
-    if (!this.isAdmin) {
+    if (this.currentUserChecked && !this.isAdmin) {
       this.$router.push("/");
       return;
     }
@@ -207,6 +207,7 @@ export default {
   },
   computed: {
     ...mapGetters(["isAdmin"]),
+    ...mapState(["currentUserChecked"]),
     ...mapState("users", ["user"]),
     isNew() {
       return this.id === NEW_PATH;

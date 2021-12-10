@@ -78,11 +78,7 @@
                         align-items-center
                       "
                     >
-                      <div>{{ c.name }}</div>
-                      <div
-                        v-bind:style="{ backgroundColor: c.color }"
-                        class="favoriteColorExample"
-                      ></div>
+                      <display-color :color="c" />
                     </button>
                   </div>
                 </div>
@@ -167,6 +163,7 @@
 
 <script>
 import { mapState } from "vuex";
+import DisplayColor from "./DisplayColor.vue";
 
 const MIN_SIZE = 1;
 const MAX_SIZE = 16;
@@ -181,6 +178,9 @@ export default {
       type: Boolean,
       default: true,
     },
+  },
+  components: {
+    DisplayColor,
   },
   data() {
     return {
@@ -223,7 +223,7 @@ export default {
       return { gridTemplateColumns: `repeat(${this.size}, 1fr)` };
     },
     publishButtonDisabled() {
-      return this.artName === "";
+      return this.artName === "" || this.artName.length > 50;
     },
     minSize() {
       return MIN_SIZE;

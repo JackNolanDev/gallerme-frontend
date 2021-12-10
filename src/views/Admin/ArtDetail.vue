@@ -48,7 +48,7 @@
           :showFavoriteColorSelector="false"
           @published="createButton"
         />
-        <display-art v-else v-bind:art="art" class="col-12" />
+        <display-art v-else v-bind:art="art" class="art" />
       </div>
       <router-link to="/admin/art" class="btn btn-secondary me-1">
         Cancel
@@ -71,6 +71,10 @@
         Delete
       </button>
     </form>
+    <div v-if="!isNew" class="mt-2">
+      <h2>Favorite Colors in this art</h2>
+      <color-list />
+    </div>
     <confirmation-modal
       v-bind:title="confirmationTitle"
       v-bind:body="confirmationBody"
@@ -89,6 +93,7 @@ import { validate } from "uuid";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
 import DisplayArt from "../../components/DisplayArt.vue";
 import CreateArt from "../../components/CreateArt.vue";
+import ColorList from "../../components/ColorList.vue";
 
 const NEW_PATH = "new";
 
@@ -98,6 +103,7 @@ export default {
     ConfirmationModal,
     DisplayArt,
     CreateArt,
+    ColorList,
   },
   data() {
     return {
@@ -112,7 +118,7 @@ export default {
     };
   },
   beforeMount() {
-    if (!this.isAdmin) {
+    if (this.currentUserChecked && !this.isAdmin) {
       this.$router.push("/");
       return;
     }
@@ -120,6 +126,8 @@ export default {
     if (!this.isNew) {
       if (validate(this.id)) {
         this.$store.dispatch("art/fetchArtById", this.id);
+        //this.$store.dispatch("users/fetchUserByArtId", this.id);
+        this.$store.dispatch("colors/fetchColorsByArtId", this.id);
       } else {
         this.$router.push({ name: "AdminArt" });
       }
@@ -129,6 +137,8 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["isAdmin"]),
+    ...mapState(["currentUserChecked"]),
     ...mapState("art", ["art"]),
     isNew() {
       return this.id === NEW_PATH;
@@ -144,7 +154,6 @@ export default {
     },
   },
   methods: {
-    ...mapGetters(["isAdmin"]),
     ...mapMutations("art", ["setArt"]),
     createButton(art) {
       if (!this.art.user_id) {
@@ -198,3 +207,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.art {
+  max-width: 300px;
+}
+</style>
