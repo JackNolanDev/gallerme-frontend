@@ -14,6 +14,9 @@ const mutations = {
   setColors(state, colors) {
     state.colors = colors;
   },
+  appendToColors(state, color) {
+    state.colors.push(color);
+  },
   setColorSearchList(state, list) {
     state.colorSearchList = list;
   },
@@ -22,6 +25,13 @@ const mutations = {
 const actions = {
   fetchColors: ({ commit }) => {
     colorApi.getAllColors().then((response) => {
+      if (response && response.status === 0) {
+        commit("setColors", response.value);
+      }
+    });
+  },
+  fetchColorsForCurrentUser: ({ commit }) => {
+    colorApi.getColorsForCurrentUser().then((response) => {
       if (response && response.status === 0) {
         commit("setColors", response.value);
       }
@@ -55,12 +65,16 @@ const actions = {
       }
     });
   },
-  createColor: ({ commit }, color) => {
+  createColor: ({ commit }, { color, redirectLink }) => {
     colorApi.createColor(color).then((response) => {
       if (response && response.status === 0) {
         // just route to correct page instead of setting details here
         commit("setColor", response.value);
-        router.push("/admin/colors");
+        if (redirectLink) {
+          router.push(redirectLink);
+        } else {
+          commit("appendToColors", response.value);
+        }
       }
     });
   },
@@ -71,11 +85,13 @@ const actions = {
       }
     });
   },
-  deleteColor: ({ commit }, id) => {
+  deleteColor: ({ commit }, { id, redirectLink }) => {
     colorApi.deleteColor(id).then((response) => {
       if (response && response.status === 0) {
         commit("setColor", {});
-        router.push("/admin/colors");
+        if (redirectLink) {
+          router.push(redirectLink);
+        }
       }
     });
   },

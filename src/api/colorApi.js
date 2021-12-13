@@ -16,9 +16,9 @@ const getColorByArtId = (id) => {
   return backendApi.get(`/colors/art/${id}`).then((response) => response.data);
 };
 
-const searchColor = (term) => {
+const searchColors = (term) => {
   return backendApi
-    .get("/color/search", { params: { term } })
+    .get("/colors/search", { params: { term } })
     .then((response) => response.data);
 };
 
@@ -34,13 +34,18 @@ const deleteColor = (id) => {
   return backendApi.delete(`/colors/${id}`).then((response) => response.data);
 };
 
+const getColorsForCurrentUser = () => {
+  return backendApi.get("/account/colors").then((response) => response.data);
+};
+
 export default {
   getAllColors,
   getColorById,
   getColorByUserId,
   getColorByArtId,
-  searchColor,
+  searchColors,
   createColor,
   updateColor,
   deleteColor,
+  getColorsForCurrentUser,
 };

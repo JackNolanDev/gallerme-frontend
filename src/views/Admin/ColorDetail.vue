@@ -17,7 +17,15 @@
         />
       </div>
       <div class="mb-3">
-        <label for="color-user-id" class="form-label">User ID</label>
+        <label for="color-user-id" class="form-label">
+          User ID
+          <router-link
+            :to="{ name: 'AdminUserDetail', params: { id: color.user_id } }"
+            v-if="!isNew"
+          >
+            (visit user page)
+          </router-link>
+        </label>
         <input
           type="text"
           v-model="color.user_id"
@@ -85,6 +93,10 @@
         Delete
       </button>
     </form>
+    <div v-if="!isNew" class="mt-2">
+      <h2>Artworks connected to this color</h2>
+      <art-list />
+    </div>
     <confirmation-modal
       v-bind:title="confirmationTitle"
       v-bind:body="confirmationBody"
@@ -101,6 +113,7 @@
 import { mapGetters, mapState, mapMutations } from "vuex";
 import { validate } from "uuid";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
+import ArtList from "../../components/ArtList.vue";
 
 const NEW_PATH = "new";
 
@@ -108,6 +121,7 @@ export default {
   name: "AdminUserDetail",
   components: {
     ConfirmationModal,
+    ArtList,
   },
   data() {
     return {
@@ -129,6 +143,7 @@ export default {
     if (!this.isNew) {
       if (validate(this.id)) {
         this.$store.dispatch("colors/fetchColorById", this.id);
+        this.$store.dispatch("art/fetchArtByColorId", this.id);
       } else {
         this.$router.push({ name: "AdminColors" });
       }
@@ -201,14 +216,20 @@ export default {
       };
       switch (this.confirmedMethod) {
         case "create":
-          this.$store.dispatch("colors/createColor", newColor);
+          this.$store.dispatch("colors/createColor", {
+            color: newColor,
+            redirectLink: "/admin/colors",
+          });
           break;
         case "update":
           newColor.id = this.color.id;
           this.$store.dispatch("colors/updateColor", newColor);
           break;
         case "delete":
-          this.$store.dispatch("colors/deleteColor", this.id);
+          this.$store.dispatch("colors/deleteColor", {
+            id: this.id,
+            redirectLink: "/admin/colors",
+          });
           break;
       }
     },

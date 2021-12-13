@@ -8,16 +8,7 @@ import accountApi from "../api/accountApi";
 
 Vue.use(Vuex);
 
-const tempColors = [
-  { id: 1, name: "Blue", color: "#256eff" },
-  { id: 2, name: "Purple", color: "#46237a" },
-  { id: 3, name: "Fancy Schmancy Aquamarine", color: "#3ddc97" },
-  { id: 4, name: "Basically just white", color: "#fcfcfc" },
-  { id: 5, name: "RED", color: "#ff495c" },
-];
-
 const state = {
-  favoriteColors: tempColors, // [],
   currentUser: {},
   currentUserChecked: false,
 };
@@ -28,9 +19,6 @@ const getters = {
 };
 
 const mutations = {
-  setFavoriteColors(state, favoriteColors) {
-    state.favoriteColors = favoriteColors;
-  },
   setCurrentUser(state, currentUser) {
     state.currentUser = currentUser;
   },

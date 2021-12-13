@@ -45,7 +45,7 @@
               />
             </div>
             <!-- ************ FAVORITE COLOR SELECTOR ************ -->
-            <div v-if="showFavoriteColorSelector" class="accordion mb-2">
+            <div class="accordion mb-2">
               <div class="accordion-item">
                 <h2 class="accordion-header">
                   <button
@@ -53,7 +53,7 @@
                     v-bind:class="favoriteColorHeaderClass"
                     class="accordion-button"
                   >
-                    Show Favorite colors
+                    Show saved colors
                   </button>
                 </h2>
                 <div
@@ -61,22 +61,91 @@
                   class="accordion-collapse collapse"
                 >
                   <div class="list-group list-group-flush">
-                    <router-link
-                      to="/color"
-                      class="list-group-item list-group-item-action"
-                    >
-                      Edit favorite colors
-                    </router-link>
+                    <div v-if="showFavoriteColorSelector">
+                      <div class="list-group-item">
+                        <label for="currentColorForm" class="form-label">
+                          Save currently selected color
+                        </label>
+                        <form class="row">
+                          <div
+                            class="
+                              form-group
+                              mb-2
+                              col-12 col-sm-8 col-md-12 col-xl-8
+                            "
+                          >
+                            <input
+                              type="text"
+                              id="currentColorForm"
+                              v-model="saveColorField"
+                              class="form-control"
+                              placeholder="Name for current color"
+                            />
+                          </div>
+                          <div class="mb-2 col-12 col-sm-4 col-md-12 col-xl-4">
+                            <button
+                              type="button"
+                              v-bind:disabled="saveColorButtonDisabled"
+                              v-on:click="saveColorButton()"
+                              class="btn btn-primary col-12"
+                            >
+                              Save Color
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                      <button
+                        v-for="c in colors"
+                        v-bind:key="c.id"
+                        v-on:click="useFavoriteColor(c.color)"
+                        class="list-group-item list-group-item-action"
+                      >
+                        <display-color :color="c" />
+                      </button>
+                      <router-link
+                        to="/color"
+                        class="list-group-item list-group-item-action"
+                      >
+                        Edit your saved colors
+                      </router-link>
+                    </div>
+                    <div class="list-group-item">
+                      <label for="searchColorForm" class="form-label">
+                        Search for colors by anyone
+                      </label>
+                      <form class="row">
+                        <div
+                          class="
+                            form-group
+                            mb-2
+                            col-12 col-sm-8 col-md-12 col-xl-8
+                          "
+                        >
+                          <input
+                            type="text"
+                            id="searchColorForm"
+                            v-model="searchColorField"
+                            class="form-control"
+                            placeholder="Search term"
+                          />
+                        </div>
+                        <div class="mb-2 col-12 col-sm-4 col-md-12 col-xl-4">
+                          <button
+                            type="button"
+                            v-bind:disabled="searchColorButtonDisabled"
+                            v-on:click="searchColorsButton()"
+                            class="btn btn-primary col-12"
+                          >
+                            Search
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                     <button
-                      v-for="c in favoriteColors"
-                      v-bind:key="c.id"
+                      v-for="c in colorSearchList"
+                      v-bind:key="'s' + c.id"
                       v-on:click="useFavoriteColor(c.color)"
-                      class="
-                        list-group-item list-group-item-action
-                        d-flex
-                        justify-content-between
-                        align-items-center
-                      "
+                      class="list-group-item list-group-item-action"
                     >
                       <display-color :color="c" />
                     </button>
@@ -158,12 +227,14 @@
         </div>
       </div>
     </div>
+    <login-modal ref="LoginModal" />
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import DisplayColor from "./DisplayColor.vue";
+import LoginModal from "./loginModal.vue";
 
 const MIN_SIZE = 1;
 const MAX_SIZE = 16;
@@ -181,6 +252,7 @@ export default {
   },
   components: {
     DisplayColor,
+    LoginModal,
   },
   data() {
     return {
@@ -192,6 +264,9 @@ export default {
       isDrawing: false,
       displayFavoriteColors: false,
       tool: "pencil",
+      saveColorField: "",
+      searchColorField: "",
+      previousSearchTerm: "",
     };
   },
   beforeMount() {
@@ -218,7 +293,9 @@ export default {
     localStorage.setItem(LOCAL_STORAGE_SIZE, DEFAULT_SIZE);
   },
   computed: {
-    ...mapState(["favoriteColors"]),
+    ...mapGetters(["isLoggedIn"]),
+    ...mapState(["currentUser"]),
+    ...mapState("colors", ["colors", "colorSearchList"]),
     artBoardStyle() {
       return { gridTemplateColumns: `repeat(${this.size}, 1fr)` };
     },
@@ -236,6 +313,19 @@ export default {
     },
     favoriteColorHeaderClass() {
       return this.displayFavoriteColors ? "" : "collapsed";
+    },
+    saveColorButtonDisabled() {
+      return (
+        this.saveColorField === "" ||
+        this.colors.some((c) => c.color === this.color) ||
+        this.colorSearchList.some((c) => c.color === this.color)
+      );
+    },
+    searchColorButtonDisabled() {
+      return (
+        this.searchColorField === "" ||
+        this.searchColorField === this.previousSearchTerm
+      );
     },
   },
   methods: {
@@ -308,19 +398,39 @@ export default {
         ""
       );
       const response = { name: this.artName, size: this.size, data };
-      // Check if we used any of our favorite colors
-      if (this.showFavoriteColorSelector) {
-        const usedColorSet = new Set(this.pixels.map((pixel) => pixel.color));
-        const colors = this.favoriteColors
-          .filter((c) => usedColorSet.has(c.color))
-          .map((c) => c.id);
-        response.colors = colors;
+      // Check if we used any of our saved colors
+      const usedColorSet = new Set(this.pixels.map((pixel) => pixel.color));
+      const colorIds = this.colors
+        .filter((c) => usedColorSet.has(c.color))
+        .map((c) => c.id);
+      const searchColorIds = this.colorSearchList
+        .filter((c) => usedColorSet.has(c.color))
+        .filter((c) => !colorIds.includes(c.id))
+        .map((c) => c.id);
+      colorIds.push(...searchColorIds);
+      if (colorIds.length > 0) {
+        response.colors = colorIds;
       }
-      console.log(response);
-      // local storage should be cleared after API is completed successfully
-      // localStorage.removeItem(LOCAL_STORAGE_SIZE);
-      // localStorage.removeItem(LOCAL_STORAGE_PIXELS);
       this.$emit("published", response);
+    },
+    saveColorButton() {
+      if (!this.isLoggedIn) {
+        this.$refs.LoginModal.toggleVisible();
+        return;
+      }
+      const newColor = {
+        user_id: this.currentUser.id,
+        name: this.saveColorField,
+        color: this.color,
+      };
+      this.$store.dispatch("colors/createColor", {
+        color: newColor,
+        redirectLink: false,
+      });
+    },
+    searchColorsButton() {
+      this.previousSearchTerm = this.searchColorField;
+      this.$store.dispatch("colors/searchForColors", this.searchColorField);
     },
   },
 };

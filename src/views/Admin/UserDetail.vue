@@ -153,6 +153,12 @@
         Delete
       </button>
     </form>
+    <div v-if="!isNew" class="mt-2">
+      <h2>Artworks created by this user</h2>
+      <art-list />
+      <h2>Colors saved by this user</h2>
+      <color-list />
+    </div>
     <confirmation-modal
       v-bind:title="confirmationTitle"
       v-bind:body="confirmationBody"
@@ -169,6 +175,8 @@
 import { mapGetters, mapState, mapMutations } from "vuex";
 import { validate } from "uuid";
 import ConfirmationModal from "../../components/ConfirmationModal.vue";
+import ColorList from "../../components/ColorList.vue";
+import ArtList from "../../components/ArtList.vue";
 
 const NEW_PATH = "new";
 
@@ -176,6 +184,8 @@ export default {
   name: "AdminUserDetail",
   components: {
     ConfirmationModal,
+    ColorList,
+    ArtList,
   },
   data() {
     return {
@@ -197,6 +207,8 @@ export default {
     if (!this.isNew) {
       if (validate(this.id)) {
         this.$store.dispatch("users/fetchUserById", this.id);
+        this.$store.dispatch("colors/fetchColorsByUserId", this.id);
+        this.$store.dispatch("art/fetchArtByUserId", this.id);
       } else {
         this.$router.push({ name: "AdminUsers" });
       }

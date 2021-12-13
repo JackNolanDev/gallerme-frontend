@@ -27,6 +27,13 @@ const actions = {
       }
     });
   },
+  fetchArtForCurrentUser: ({ commit }) => {
+    artApi.getArtForCurrentUser().then((response) => {
+      if (response && response.status === 0) {
+        commit("setArtList", response.value);
+      }
+    });
+  },
   fetchArtById: ({ commit }, id) => {
     artApi.getArtById(id).then((response) => {
       if (response && response.status === 0) {
@@ -55,15 +62,19 @@ const actions = {
       }
     });
   },
-  createArt: ({ commit }, art) => {
+  createArt: ({ commit }, { art, redirectLink }) => {
     artApi.createArt(art).then((response) => {
       if (response && response.status === 0) {
-        // just route to correct page instead of setting details here
         commit("setArt", response.value);
         // TODO: read from a constants util file
         localStorage.removeItem("create_size");
         localStorage.removeItem("create_pixels");
-        router.push("/admin/art");
+        if (redirectLink) {
+          router.push(redirectLink);
+        } else {
+          // always redirect anyway to detail page
+          router.push({ name: "Detail", params: { id: response.value.id } });
+        }
       }
     });
   },
@@ -74,11 +85,13 @@ const actions = {
       }
     });
   },
-  deleteArt: ({ commit }, id) => {
+  deleteArt: ({ commit }, { id, redirectLink }) => {
     artApi.deleteArt(id).then((response) => {
       if (response && response.status === 0) {
         commit("setArt", {});
-        router.push("/admin/art");
+        if (redirectLink) {
+          router.push(redirectLink);
+        }
       }
     });
   },

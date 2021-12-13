@@ -17,7 +17,15 @@
         />
       </div>
       <div class="mb-3">
-        <label for="art-user-id" class="form-label">User ID</label>
+        <label for="art-user-id" class="form-label">
+          User ID
+          <router-link
+            :to="{ name: 'AdminUserDetail', params: { id: art.user_id } }"
+            v-if="!isNew"
+          >
+            (visit user page)
+          </router-link>
+        </label>
         <input
           type="text"
           v-model="art.user_id"
@@ -190,17 +198,23 @@ export default {
       switch (this.confirmedMethod) {
         case "create":
           this.$store.dispatch("art/createArt", {
-            user_id: this.art.user_id,
-            name: this.publishedArt.name,
-            size: this.publishedArt.size,
-            data: this.publishedArt.data,
+            art: {
+              user_id: this.art.user_id,
+              name: this.publishedArt.name,
+              size: this.publishedArt.size,
+              data: this.publishedArt.data,
+            },
+            redirectLink: "/admin/art",
           });
           break;
         case "update":
           this.$store.dispatch("art/updateArt", this.art);
           break;
         case "delete":
-          this.$store.dispatch("art/deleteArt", this.id);
+          this.$store.dispatch("art/deleteArt", {
+            id: this.id,
+            redirectLink: "/admin/art",
+          });
           break;
       }
     },

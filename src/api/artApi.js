@@ -34,6 +34,10 @@ const deleteArt = (id) => {
   return backendApi.delete(`/art/${id}`).then((response) => response.data);
 };
 
+const getArtForCurrentUser = () => {
+  return backendApi.get("/account/art").then((response) => response.data);
+};
+
 export default {
   getAllArt,
   getArtById,
@@ -43,4 +47,5 @@ export default {
   createArt,
   updateArt,
   deleteArt,
+  getArtForCurrentUser,
 };
