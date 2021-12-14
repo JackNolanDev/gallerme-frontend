@@ -6,10 +6,19 @@ import colorStore from "./colors";
 import userStore from "./users";
 import accountApi from "../api/accountApi";
 
+// Hack - trim date format so html form can read it - need util JS file because this is duplicated
+const trimDOB = (res) => {
+  if (res.value.date_of_birth && res.value.date_of_birth.length > 10) {
+    return res.value.date_of_birth.substring(0, 10);
+  }
+  return undefined;
+};
+
 Vue.use(Vuex);
 
 const state = {
   currentUser: {},
+  currentUserDup: {},
   currentUserChecked: false,
 };
 
@@ -21,6 +30,7 @@ const getters = {
 const mutations = {
   setCurrentUser(state, currentUser) {
     state.currentUser = currentUser;
+    state.currentUserDup = { ...currentUser }; // need to copy values not set pointer
   },
   currentUserChecked(state) {
     state.currentUserChecked = true;
@@ -35,6 +45,7 @@ const actions = {
         commit("currentUserChecked");
         if (response) {
           if (response.status === 0) {
+            response.value.date_of_birth = trimDOB(response);
             commit("setCurrentUser", response.value);
             if (
               router.currentRoute.meta.adminOnly &&

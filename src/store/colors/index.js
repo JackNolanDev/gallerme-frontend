@@ -5,6 +5,7 @@ const state = {
   color: {},
   colors: [],
   colorSearchList: [],
+  fullColorSearchList: [],
 };
 
 const mutations = {
@@ -18,6 +19,7 @@ const mutations = {
     state.colors.push(color);
   },
   setColorSearchList(state, list) {
+    state.fullColorSearchList.push(...list);
     state.colorSearchList = list;
   },
 };

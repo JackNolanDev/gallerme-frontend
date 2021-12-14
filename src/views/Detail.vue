@@ -3,7 +3,7 @@
     <h1 class="display-4 text-center mt-2">{{ art.name }}</h1>
     <div class="mt-2 art mx-auto">
       <display-art :art="art" />
-      <p class="text-end fs-5">
+      <p v-if="user.id" class="text-end fs-5">
         By
         <router-link :to="{ name: 'PublicProfile', params: { id: user.id } }">{{
           user.username
@@ -41,6 +41,8 @@ export default {
       this.$store.dispatch("art/fetchArtById", this.id);
       this.$store.dispatch("users/fetchUserByArtId", this.id);
       this.$store.dispatch("colors/fetchColorsByArtId", this.id);
+    } else {
+      this.$router.push({ name: "Home" });
     }
   },
   computed: {

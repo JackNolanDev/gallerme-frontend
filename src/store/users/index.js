@@ -71,11 +71,13 @@ const actions = {
       }
     });
   },
-  deleteUser: ({ commit }, id) => {
+  deleteUser: ({ commit }, { id, redirectLink }) => {
     userApi.deleteUser(id).then((response) => {
       if (response && response.status === 0) {
         commit("setUser", {});
-        router.push("/admin/users");
+        if (redirectLink) {
+          router.push(redirectLink);
+        }
       }
     });
   },

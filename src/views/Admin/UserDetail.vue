@@ -166,7 +166,7 @@
       v-bind:primaryButtonClass="confirmationButtonClass"
       v-bind:visible="confirmationVisible"
       @toggleVisible="toggleVisible"
-      @primaryButton="confirmedDeleteButton"
+      @primaryButton="confirmedButton"
     />
   </div>
 </template>
@@ -276,7 +276,7 @@ export default {
     toggleVisible() {
       this.confirmationVisible = !this.confirmationVisible;
     },
-    confirmedDeleteButton() {
+    confirmedButton() {
       const newUser = {
         username: this.user.username,
         email: this.user.email,
@@ -301,7 +301,10 @@ export default {
           this.$store.dispatch("users/updateUser", newUser);
           break;
         case "delete":
-          this.$store.dispatch("users/deleteUser", this.id);
+          this.$store.dispatch("users/deleteUser", {
+            id: this.id,
+            redirectLink: "/admin/users",
+          });
           break;
       }
     },

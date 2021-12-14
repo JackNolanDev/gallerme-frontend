@@ -125,7 +125,6 @@ const actions = {
     }
     aicApi.searchArt(term, page, AIC_LIMIT).then((response) => {
       if (response) {
-        console.log(response);
         commit("setAicResult", response);
       }
     });

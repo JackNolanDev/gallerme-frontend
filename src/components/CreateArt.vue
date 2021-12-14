@@ -295,7 +295,7 @@ export default {
   computed: {
     ...mapGetters(["isLoggedIn"]),
     ...mapState(["currentUser"]),
-    ...mapState("colors", ["colors", "colorSearchList"]),
+    ...mapState("colors", ["colors", "colorSearchList", "fullColorSearchList"]),
     artBoardStyle() {
       return { gridTemplateColumns: `repeat(${this.size}, 1fr)` };
     },
@@ -403,11 +403,12 @@ export default {
       const colorIds = this.colors
         .filter((c) => usedColorSet.has(c.color))
         .map((c) => c.id);
-      const searchColorIds = this.colorSearchList
+      const searchColorIds = this.fullColorSearchList
         .filter((c) => usedColorSet.has(c.color))
         .filter((c) => !colorIds.includes(c.id))
         .map((c) => c.id);
-      colorIds.push(...searchColorIds);
+      const searchColorIdSet = new Set(searchColorIds);
+      colorIds.push(...searchColorIdSet);
       if (colorIds.length > 0) {
         response.colors = colorIds;
       }
