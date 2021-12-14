@@ -1,4 +1,4 @@
-import backendApi from "./backendApi";
+import backendApi from "./apiInstances/backendApiInstance";
 
 const getAllArt = () => {
   return backendApi.get("/art").then((response) => response.data);
@@ -38,6 +38,10 @@ const getArtForCurrentUser = () => {
   return backendApi.get("/account/art").then((response) => response.data);
 };
 
+const getArtForHome = () => {
+  return backendApi.get("/account/art/home").then((response) => response.data);
+};
+
 export default {
   getAllArt,
   getArtById,
@@ -48,4 +52,5 @@ export default {
   updateArt,
   deleteArt,
   getArtForCurrentUser,
+  getArtForHome,
 };

@@ -1,11 +1,13 @@
 <template>
   <div class="container">
-    <h1 class="text-center mt-2">Sign Up</h1>
+    <h1 class="display-2 text-center mt-2">Sign Up</h1>
     <div class="row">
       <div class="col-0 col-md-1 col-lg-2 col-xxl-3"></div>
       <form class="col-12 col-md-10 col-lg-8 col-xxl-6">
         <div class="mb-3">
-          <label for="user-username" class="form-label">Username</label>
+          <label for="user-username" class="form-label">
+            Username (Required, Visible to other users)
+          </label>
           <input
             type="text"
             v-model="formUsername"
@@ -46,7 +48,9 @@
           <div class="invalid-feedback">Passwords need to match!</div>
         </div>
         <div class="mb-3">
-          <label for="user-email" class="form-label">Email</label>
+          <label for="user-email" class="form-label">
+            Email (Required, NOT visible to other users)
+          </label>
           <input
             type="text"
             v-model="formEmail"
@@ -60,7 +64,7 @@
         <div class="mb-3 row">
           <div class="col-12 col-md-6 mb-3 mb-md-0">
             <label for="user-first-name" class="form-label">
-              First Name (Not Required)
+              First Name (Not Required, visible to other users if entered)
             </label>
             <input
               type="text"
@@ -72,7 +76,7 @@
           </div>
           <div class="col-12 col-md-6">
             <label for="user-last-name" class="form-label">
-              Last Name (Not Required)
+              Last Name (Not Required, visible to other users if entered)
             </label>
             <input
               type="text"
@@ -85,7 +89,7 @@
         </div>
         <div class="mb-3">
           <label for="user-dob" class="form-label">
-            Birth Day (Not Required)
+            Birth Day (Not Required, NOT visible to other users)
           </label>
           <input
             type="date"

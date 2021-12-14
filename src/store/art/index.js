@@ -1,10 +1,15 @@
+import aicApi from "@/api/aicApi";
 import artApi from "@/api/artApi";
 import router from "@/router/index";
+
+const AIC_LIMIT = 10;
 
 const state = {
   art: {},
   artList: [],
-  searchList: [],
+  aicPage: 1,
+  prevAicTerm: "",
+  inspiration: [],
 };
 
 const mutations = {
@@ -14,8 +19,14 @@ const mutations = {
   setArtList(state, artList) {
     state.artList = artList;
   },
-  setSearchList(state, list) {
-    state.searchList = list;
+  setAicResult(state, result) {
+    state.aicPage = result.pagination.current_page;
+    state.inspiration = result.data;
+  },
+  resetAic(state, term) {
+    state.aicPage = 1;
+    state.inspiration = [];
+    state.prevAicTerm = term;
   },
 };
 
@@ -34,10 +45,21 @@ const actions = {
       }
     });
   },
-  fetchArtById: ({ commit }, id) => {
+  fetchHomeArt: ({ commit }) => {
+    artApi.getArtForHome().then((response) => {
+      if (response && response.status === 0) {
+        commit("setArtList", response.value);
+      }
+    });
+  },
+  fetchArtById: ({ dispatch, commit }, id) => {
     artApi.getArtById(id).then((response) => {
       if (response && response.status === 0) {
         commit("setArt", response.value);
+        // grab details based on art name if on detail page
+        if (router.currentRoute.name === "Detail") {
+          dispatch("fetchInspiration", response.value.name);
+        }
       }
     });
   },
@@ -92,6 +114,19 @@ const actions = {
         if (redirectLink) {
           router.push(redirectLink);
         }
+      }
+    });
+  },
+  fetchInspiration: ({ state, commit }, term) => {
+    let page = state.aicPage;
+    if (term !== state.prevAicTerm) {
+      commit("resetAic", term);
+      page = 1;
+    }
+    aicApi.searchArt(term, page, AIC_LIMIT).then((response) => {
+      if (response) {
+        console.log(response);
+        commit("setAicResult", response);
       }
     });
   },

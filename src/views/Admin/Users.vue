@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="text-center mt-2">Users</h1>
+    <h1 class="display-3 text-center mt-2">Users</h1>
     <router-link to="/admin/users/new" class="btn btn-primary">
       Create New User
     </router-link>

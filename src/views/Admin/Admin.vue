@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="text-center mt-2">Admin page</h1>
+    <h1 class="display-3 text-center mt-2">Admin page</h1>
     <p>Links:</p>
     <ul>
       <li>

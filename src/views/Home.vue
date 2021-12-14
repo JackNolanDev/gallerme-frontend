@@ -1,14 +1,18 @@
 <template>
-  <div>
-    <h1>Hi</h1>
+  <div class="container">
+    <h1 class="display-1 text-center mt-2">GALLERME</h1>
+    <p class="text-center">A Pixel Art Website</p>
+    <art-list />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-//import HelloWorld from "@/components/HelloWorld.vue";
-
+import ArtList from "../components/ArtList.vue";
 export default {
+  components: { ArtList },
   name: "Home",
+  beforeMount() {
+    this.$store.dispatch("art/fetchHomeArt");
+  },
 };
 </script>

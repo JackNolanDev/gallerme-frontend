@@ -61,6 +61,14 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "profile" */ "../views/Profile.vue"),
   },
+  {
+    path: "/profile/:id",
+    name: "PublicProfile",
+    component: () =>
+      import(
+        /* webpackChunkName: "publicProfile" */ "../views/PublicProfile.vue"
+      ),
+  },
   /* ADMIN PAGES */
   {
     path: "/admin",

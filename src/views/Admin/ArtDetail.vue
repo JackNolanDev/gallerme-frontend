@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div v-if="isNew">
-      <h1 class="text-center mt-2">New Art</h1>
+      <h1 class="display-3 text-center mt-2">New Art</h1>
     </div>
-    <h1 v-else class="text-center mt-2">Art Details</h1>
+    <h1 v-else class="display-3 text-center mt-2">Art Details</h1>
     <form>
       <div v-if="!isNew" class="mb-3">
         <label for="art-id" class="form-label">ID</label>

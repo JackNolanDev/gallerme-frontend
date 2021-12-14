@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div v-if="isNew">
-      <h1 class="text-center mt-2">New Color</h1>
+      <h1 class="display-3 text-center mt-2">New Color</h1>
     </div>
-    <h1 v-else class="text-center mt-2">Color Details</h1>
+    <h1 v-else class="display-3 text-center mt-2">Color Details</h1>
     <form>
       <div v-if="!isNew" class="mb-3">
         <label for="color-id" class="form-label">ID</label>
@@ -95,7 +95,7 @@
     </form>
     <div v-if="!isNew" class="mt-2">
       <h2>Artworks connected to this color</h2>
-      <art-list />
+      <art-list :isAdmin="true" />
     </div>
     <confirmation-modal
       v-bind:title="confirmationTitle"

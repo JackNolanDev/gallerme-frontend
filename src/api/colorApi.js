@@ -1,4 +1,4 @@
-import backendApi from "./backendApi";
+import backendApi from "./apiInstances/backendApiInstance";
 
 const getAllColors = () => {
   return backendApi.get("/colors").then((response) => response.data);

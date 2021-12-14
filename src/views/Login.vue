@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="text-center mt-2">Login</h1>
+    <h1 class="display-2 text-center mt-2">Login</h1>
     <div class="row">
       <div class="col-0 col-md-1 col-lg-2 col-xxl-3"></div>
       <form class="col-12 col-md-10 col-lg-8 col-xxl-6">

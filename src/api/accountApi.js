@@ -1,4 +1,4 @@
-import backendApi from "./backendApi";
+import backendApi from "./apiInstances/backendApiInstance";
 
 const currentUser = () => {
   return backendApi.get("/account").then((response) => response.data);
