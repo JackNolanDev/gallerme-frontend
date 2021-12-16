@@ -157,7 +157,7 @@
       <h2>Artworks created by this user</h2>
       <art-list :isAdmin="true" />
       <h2>Colors saved by this user</h2>
-      <color-list />
+      <color-list :isAdmin="true" />
     </div>
     <confirmation-modal
       v-bind:title="confirmationTitle"

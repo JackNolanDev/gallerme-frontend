@@ -4,7 +4,7 @@
     <router-link to="/admin/colors/new" class="btn btn-primary">
       Create New Color
     </router-link>
-    <color-list class="mt-2" />
+    <color-list :isAdmin="true" class="mt-2" />
   </div>
 </template>
 

@@ -81,7 +81,7 @@
     </form>
     <div v-if="!isNew" class="mt-2">
       <h2>Favorite Colors in this art</h2>
-      <color-list />
+      <color-list :isAdmin="true" />
     </div>
     <confirmation-modal
       v-bind:title="confirmationTitle"

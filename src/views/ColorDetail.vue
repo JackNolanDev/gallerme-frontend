@@ -1,24 +1,27 @@
 <template>
   <div class="container">
-    <h1 class="display-4 text-center mt-2">{{ art.name }}</h1>
-    <div class="mt-2 art mx-auto">
-      <display-art :art="art" />
-      <p v-if="user.id" class="text-end fs-5">
-        By
-        <router-link :to="{ name: 'PublicProfile', params: { id: user.id } }">{{
-          user.username
-        }}</router-link>
-      </p>
+    <h1 class="display-3 text-center mt-2">Edit Saved Color</h1>
+    <div class="card mt-2">
+      <display-color class="card-body" :color="color" />
     </div>
+    <p class="mt-3">
+      <router-link
+        :to="{ name: 'PublicProfile', params: { id: color.user_id } }"
+      >
+        Visit the owner's profile page
+      </router-link>
+    </p>
     <form v-if="userIsOwner" class="card mt-3">
       <div class="card-body">
         <div>
-          <label for="art-name" class="form-label">Edit artwork's name</label>
+          <label for="color-name" class="form-label">
+            Edit saved color's name
+          </label>
           <input
             type="text"
-            v-model="art.name"
+            v-model="color.name"
             placeholder="Name"
-            id="art-name"
+            id="color-name"
             class="form-control"
             v-bind:class="nameFormClass"
           />
@@ -37,21 +40,13 @@
           v-on:click="deleteButton()"
           class="btn btn-danger me-1 mt-2"
         >
-          Delete Art
+          Delete Color
         </button>
       </div>
     </form>
-    <div>
-      <h3 class="text-center mt-2">Saved Colors in this art</h3>
-      <color-list />
-    </div>
-    <div>
-      <h3 class="text-center mt-2">Possible Inspirations</h3>
-      <p class="text-center">
-        (Public domain from
-        <a href="https://www.artic.edu/">the Art Institute of Chicago</a>)
-      </p>
-      <inspiration-list />
+    <div class="mt-2">
+      <h2>Artworks connected to this color</h2>
+      <art-list />
     </div>
     <confirmation-modal
       v-bind:title="confirmationTitle"
@@ -68,14 +63,13 @@
 <script>
 import { validate } from "uuid";
 import { mapState } from "vuex";
-import DisplayArt from "../components/DisplayArt.vue";
-import ColorList from "../components/ColorList.vue";
-import InspirationList from "../components/InspirationList.vue";
+import DisplayColor from "../components/DisplayColor.vue";
+import ArtList from "../components/ArtList.vue";
 import ConfirmationModal from "../components/ConfirmationModal.vue";
 
 export default {
-  components: { DisplayArt, ColorList, InspirationList, ConfirmationModal },
-  name: "Detail",
+  components: { DisplayColor, ArtList, ConfirmationModal },
+  name: "ColorDetail",
   data() {
     return {
       confirmedMethod: "",
@@ -89,47 +83,47 @@ export default {
   beforeMount() {
     this.id = this.$route.params.id;
     if (validate(this.id)) {
-      this.$store.dispatch("art/fetchArtById", this.id);
-      this.$store.dispatch("users/fetchUserByArtId", this.id);
-      this.$store.dispatch("colors/fetchColorsByArtId", this.id);
+      this.$store.dispatch("colors/fetchColorById", this.id);
+      this.$store.dispatch("art/fetchArtByColorId", this.id);
     } else {
       this.$router.push({ name: "Home" });
     }
   },
   computed: {
     ...mapState(["currentUser"]),
-    ...mapState("art", ["art"]),
-    ...mapState("users", ["user"]),
+    ...mapState("colors", ["color"]),
     userIsOwner() {
       return (
-        this.currentUser && this.art && this.currentUser.id === this.art.user_id
+        this.currentUser &&
+        this.color &&
+        this.currentUser.id === this.color.user_id
       );
     },
     nameFormClass() {
-      return this.art.name !== "" && this.art.name.length <= 50
+      return this.color.name !== "" && this.color.name.length <= 50
         ? ""
         : "is-invalid";
     },
     buttonValid() {
-      return this.art.name !== "" && this.art.name.length <= 50;
+      return this.color.name !== "" && this.color.name.length <= 50;
     },
   },
   methods: {
     updateButton() {
       this.confirmedMethod = "update";
-      this.confirmationTitle = "Update your artwork's name?";
+      this.confirmationTitle = "Update your color's name?";
       this.confirmationBody =
         "Are you sure you want to update this name? It will be immediately visible to other users.";
-      this.confirmationButton = "Update art name";
+      this.confirmationButton = "Update Color Name";
       this.confirmationButtonClass = "btn-warning";
       this.toggleVisible();
     },
     deleteButton() {
       this.confirmedMethod = "delete";
-      this.confirmationTitle = "Delete art?";
+      this.confirmationTitle = "Delete saved color?";
       this.confirmationBody =
-        "Are you sure you want to delete this art? It will be permanently deleted from our system.";
-      this.confirmationButton = "Delete art";
+        "Are you sure you want to delete this color? It will be permanently deleted from our system.";
+      this.confirmationButton = "Delete Color";
       this.confirmationButtonClass = "btn-danger";
       this.toggleVisible();
     },
@@ -139,10 +133,10 @@ export default {
     confirmedButton() {
       switch (this.confirmedMethod) {
         case "update":
-          this.$store.dispatch("art/updateArt", this.art);
+          this.$store.dispatch("colors/updateColor", this.color);
           break;
         case "delete":
-          this.$store.dispatch("art/deleteArt", {
+          this.$store.dispatch("colors/deleteColor", {
             id: this.id,
             redirectLink: "/",
           });
@@ -152,9 +146,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.art {
-  max-width: 518px;
-}
-</style>

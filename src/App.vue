@@ -18,11 +18,3 @@ export default {
   },
 };
 </script>
-
-<style>
-/* // NOTE: Originally for adding a footer, but I decided it looked silly so it was removed
-#app {
-  position: relative;
-  min-height: 100vh;
-}*/
-</style>

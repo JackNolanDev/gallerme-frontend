@@ -1,85 +1,87 @@
 <template>
   <div class="container">
     <h1 class="display-4 text-center mt-2">{{ currentUser.username }}</h1>
-    <h4>Edit fields in your user:</h4>
-    <form>
-      <div class="mb-3">
-        <label for="user-username" class="form-label">Username</label>
-        <input
-          type="text"
-          v-model="currentUserDup.username"
-          placeholder="Username"
-          id="user-username"
-          class="form-control"
-          v-bind:class="usernameFormClass"
-          autocomplete="username"
-        />
-        <div class="invalid-feedback">Username is required!</div>
-      </div>
-      <div class="mb-3">
-        <label for="user-email" class="form-label">Email</label>
-        <input
-          type="text"
-          v-model="currentUserDup.email"
-          placeholder="Email"
-          id="user-email"
-          class="form-control"
-          v-bind:class="emailFormClass"
-        />
-        <div class="invalid-feedback">An email is required!</div>
-      </div>
-      <div class="mb-3 row">
-        <div class="col-12 col-md-6 mb-3 mb-md-0">
-          <label for="user-first-name" class="form-label">
-            First Name (Not Required)
-          </label>
+    <form class="card">
+      <div class="card-body">
+        <div class="mb-3">
+          <h4>Edit fields in your user:</h4>
+          <label for="user-username" class="form-label">Username</label>
           <input
             type="text"
-            v-model="currentUserDup.first_name"
-            placeholder="First Name"
-            id="user-first-name"
+            v-model="currentUserDup.username"
+            placeholder="Username"
+            id="user-username"
+            class="form-control"
+            v-bind:class="usernameFormClass"
+            autocomplete="username"
+          />
+          <div class="invalid-feedback">Username is required!</div>
+        </div>
+        <div class="mb-3">
+          <label for="user-email" class="form-label">Email</label>
+          <input
+            type="text"
+            v-model="currentUserDup.email"
+            placeholder="Email"
+            id="user-email"
+            class="form-control"
+            v-bind:class="emailFormClass"
+          />
+          <div class="invalid-feedback">An email is required!</div>
+        </div>
+        <div class="mb-3 row">
+          <div class="col-12 col-md-6 mb-3 mb-md-0">
+            <label for="user-first-name" class="form-label">
+              First Name (Not Required)
+            </label>
+            <input
+              type="text"
+              v-model="currentUserDup.first_name"
+              placeholder="First Name"
+              id="user-first-name"
+              class="form-control"
+            />
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="user-last-name" class="form-label">
+              Last Name (Not Required)
+            </label>
+            <input
+              type="text"
+              v-model="currentUserDup.last_name"
+              placeholder="Last Name"
+              id="user-last-name"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="user-dob" class="form-label">
+            Birth Day (Not Required)
+          </label>
+          <input
+            type="date"
+            v-model="currentUserDup.date_of_birth"
+            id="user-dob"
             class="form-control"
           />
         </div>
-        <div class="col-12 col-md-6">
-          <label for="user-last-name" class="form-label">
-            Last Name (Not Required)
-          </label>
-          <input
-            type="text"
-            v-model="currentUserDup.last_name"
-            placeholder="Last Name"
-            id="user-last-name"
-            class="form-control"
-          />
-        </div>
+        <button
+          type="button"
+          v-on:click="updateButton()"
+          class="btn btn-warning me-1"
+          :disabled="!buttonValid"
+        >
+          Update user fields
+        </button>
+        <button
+          type="button"
+          v-on:click="deleteButton()"
+          class="btn btn-danger me-1"
+        >
+          Delete account
+        </button>
       </div>
-      <div class="mb-3">
-        <label for="user-dob" class="form-label">
-          Birth Day (Not Required)
-        </label>
-        <input
-          type="date"
-          v-model="currentUserDup.date_of_birth"
-          id="user-dob"
-          class="form-control"
-        />
-      </div>
-      <button
-        type="button"
-        v-on:click="updateButton()"
-        class="btn btn-warning me-1"
-        :disabled="!buttonValid"
-      >
-        Update user fields
-      </button>
-      <button
-        type="button"
-        v-on:click="deleteButton()"
-        class="btn btn-danger me-1"
-      >
-        Delete account
-      </button>
     </form>
     <h2 class="mt-5">Artworks created by {{ displayName }}</h2>
     <art-list />
@@ -154,7 +156,7 @@ export default {
       this.confirmedMethod = "update";
       this.confirmationTitle = "Update your account information?";
       this.confirmationBody =
-        "Are you sure you want this information? It will be permanent.";
+        "Are you sure you want to update this information? It will be permanent.";
       this.confirmationButton = "Update account";
       this.confirmationButtonClass = "btn-warning";
       this.toggleVisible();

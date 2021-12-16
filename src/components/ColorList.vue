@@ -23,9 +23,9 @@ import DisplayColor from "./DisplayColor.vue";
 export default {
   name: "ColorList",
   props: {
-    linkName: {
-      type: String,
-      default: "AdminColorDetail",
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   components: {
@@ -33,6 +33,9 @@ export default {
   },
   computed: {
     ...mapState("colors", ["colors"]),
+    linkName() {
+      return this.isAdmin ? "AdminColorDetail" : "ColorDetails";
+    },
   },
 };
 </script>

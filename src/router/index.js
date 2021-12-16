@@ -31,6 +31,12 @@ const routes = [
       import(/* webpackChunkName: "color" */ "../views/Color.vue"),
   },
   {
+    path: "/color/:id",
+    name: "ColorDetails",
+    component: () =>
+      import(/* webpackChunkName: "colorDetail" */ "../views/ColorDetail.vue"),
+  },
+  {
     path: "/search",
     name: "Explore",
     component: () =>
@@ -67,6 +73,14 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "publicProfile" */ "../views/PublicProfile.vue"
+      ),
+  },
+  {
+    path: "/privacy",
+    name: "PrivacyPolicy",
+    component: () =>
+      import(
+        /* webpackChunkName: "privacyPolicy" */ "../views/PrivacyPolicy.vue"
       ),
   },
   /* ADMIN PAGES */
